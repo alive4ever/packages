@@ -13,6 +13,9 @@ PKG_BUILD_DEPENDS:=gnu-efi binutils
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
+HOST_BUILD_DEPENDS:=gnu-efi/host
+
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sbsigntool
@@ -31,12 +34,20 @@ endef
 define Build/Prepare
 $(call Build/Prepare/Default)
 	sed -i "s#-I/usr/include/efi#-I$(STAGING_DIR)/usr/include/efi#g" \
-	$(PKG_BUILD_DIR)configure.ac
+	$(PKG_BUILD_DIR)/configure.ac
 endef
 
 define Package/sbsigntool/install
+$(call Build/Install/Default,install-exec)
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
 endef
 
+define Host/Prepare
+$(call Host/Prepare/Default)
+	sed -i "s#-I/usr/include/efi#-I$(STAGING_DIR_HOST)/include/efi#g" \
+	$(HOST_BUILD_DIR)/configure.ac
+endef
+
+$(eval $(call HostBuild,sbsigntool))
 $(eval $(call BuildPackage,sbsigntool))
