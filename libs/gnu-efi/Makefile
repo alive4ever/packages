@@ -22,6 +22,7 @@ define Package/gnu-efi
   CATEGORY:=Libraries
   TITLE:=A library for building UEFI applications using GNU toolchain
   URL:=https://sourceforge.net/projects/gnu-efi
+  DEPENDS:=@(x86_64||i386)
 endef
 
 define Package/gnu-efi/description
