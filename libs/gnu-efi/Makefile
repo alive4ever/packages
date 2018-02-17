@@ -12,11 +12,15 @@ PKG_HASH:=21515902d80fbea23328a61d70d3d51a47204abd1507ebfa27550a7b9bf22c91
 PKG_BUILD_DEPENDS:=pciutils
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 MAKE_FLAGS+= INSTALLROOT=$(PKG_INSTALL_DIR) PREFIX="/usr"
 
 MAKE_INSTALL_FLAGS = $(MAKE_FLAGS)
+
+HOST_MAKE_FLAGS+= INSTALLROOT=$(STAGING_DIR_HOST) PREFIX="/"
+
 define Package/gnu-efi
   SECTION:=libs
   CATEGORY:=Libraries
@@ -50,4 +54,12 @@ define Package/gnu-efi/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 endef
 
+define Host/Compile
+$(call Host/Compile/Default,mkvars)
+$(call Host/Compile/Default,lib)
+$(call Host/Compile/Default,gnuefi)
+$(call Host/Compile/Default,inc)
+endef
+
+$(eval $(call HostBuild,gnu-efi))
 $(eval $(call BuildPackage,gnu-efi))
