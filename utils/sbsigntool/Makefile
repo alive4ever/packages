@@ -33,6 +33,8 @@ endef
 
 define Build/Prepare
 $(call Build/Prepare/Default)
+	sed -i 's#EFI_ARCH=$$$$(uname -m)#EFI_ARCH=$(ARCH)#' \
+	$(PKG_BUILD_DIR)/configure.ac
 	sed -i "s#-I/usr/include/efi#-I$(STAGING_DIR)/usr/include/efi#g" \
 	$(PKG_BUILD_DIR)/configure.ac
 endef
