@@ -1,13 +1,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sbsigntool
-PKG_VERSION:=0.6
-PKG_HASH:=84fb0c8f6fb1e79aa418a4f70a3139b38d5630043b28291c875f383e9b4294b8
+PKG_VERSION:=0.9.1
 PKG_LICENSE:=GPL-3.0+ OpenSSL
 PKG_MAINTAINER:=Alif M. Ahmad <alive4ever@live.com>
 
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
-PKG_SOURCE_URL:=http://http.debian.net/debian/pool/main/s/$(PKG_NAME)
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=79616f66875f619788502fbf7ddc9cc1a0b58187
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_BUILD_DEPENDS:=gnu-efi binutils
 PKG_FIXUP:=autoreconf
@@ -33,8 +35,6 @@ endef
 
 define Build/Prepare
 $(call Build/Prepare/Default)
-	sed -i 's#EFI_ARCH=$$$$(uname -m)#EFI_ARCH=$(ARCH)#' \
-	$(PKG_BUILD_DIR)/configure.ac
 	sed -i "s#-I/usr/include/efi#-I$(STAGING_DIR)/usr/include/efi#g" \
 	$(PKG_BUILD_DIR)/configure.ac
 endef

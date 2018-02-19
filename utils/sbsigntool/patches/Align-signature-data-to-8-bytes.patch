@@ -11,11 +11,9 @@ by the SysDev signing service.
  src/image.c | 2 ++
  1 file changed, 2 insertions(+)
 
-Index: sbsigntool-0.6/src/image.c
-===================================================================
---- sbsigntool-0.6.orig/src/image.c
-+++ sbsigntool-0.6/src/image.c
-@@ -425,6 +425,8 @@
+--- a/src/image.c
++++ b/src/image.c
+@@ -496,6 +496,8 @@
  	 * we've calculated during the pecoff parsing, so we need to redo that
  	 * too.
  	 */
