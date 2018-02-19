@@ -51,5 +51,10 @@ $(call Host/Prepare/Default)
 	$(HOST_BUILD_DIR)/configure.ac
 endef
 
+define Host/Install
+	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/{sbattach,sbkeysync,sbsiglist,sbsign,sbvarsign,sbverify} $(STAGING_DIR_HOST)/bin
+endef
+
 $(eval $(call HostBuild,sbsigntool))
 $(eval $(call BuildPackage,sbsigntool))
