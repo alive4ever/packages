@@ -11,7 +11,7 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=79616f66875f619788502fbf7ddc9cc1a0b58187
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
-PKG_BUILD_DEPENDS:=gnu-efi binutils
+PKG_BUILD_DEPENDS:=gnu-efi binutils sbsigntool/host
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
@@ -19,6 +19,14 @@ HOST_BUILD_DEPENDS:=gnu-efi/host
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
+
+#define Download/ccan
+#  FILE:=ccan.tar.gz
+#  PROTO:=git
+#  URL:=git://git.ozlabs.org/~ccan/ccan
+#  VERSION:=ec1f716142c77fd6b4ca9939bd780150821ba7a2
+#  SUBDIR:=lib/ccan
+#endef
 
 define Package/sbsigntool
   SECTION:=utils
@@ -35,8 +43,18 @@ endef
 
 define Build/Prepare
 $(call Build/Prepare/Default)
+	#gzip -dc $(DL_DIR)/ccan.tar.gz | tar -C $(HOST_BUILD_DIR) -xf -
+	sed -i -E 's#\$$$$path/crt0-efi#$(STAGING_DIR)/\$$$$path/crt0-efi#' \
+	$(PKG_BUILD_DIR)/configure.ac
 	sed -i "s#-I/usr/include/efi#-I$(STAGING_DIR)/usr/include/efi#g" \
 	$(PKG_BUILD_DIR)/configure.ac
+endef
+
+define Build/Configure
+	( cd $(PKG_BUILD_DIR) && NOCONFIGURE=1 ./autogen.sh && \
+	cp "lib/ccan.git/config.h" "lib/ccan/" )
+	sed -i -E 's/HAVE_BACKTRACE 1/HAVE_BACKTRACE 0' "lib/ccan/config.h
+	$(call Build/Configure/Default)
 endef
 
 define Package/sbsigntool/install
@@ -47,8 +65,17 @@ endef
 
 define Host/Prepare
 $(call Host/Prepare/Default)
+	#gzip -dc $(DL_DIR)/ccan.tar.gz | tar -C $(HOST_BUILD_DIR) -xf -
+	sed -i -E 's#\$$$$path/crt0-efi#$(STAGING_DIR_HOST)/\$$$$path/crt0-efi#' \
+	$(HOST_BUILD_DIR)/configure.ac
 	sed -i "s#-I/usr/include/efi#-I$(STAGING_DIR_HOST)/include/efi#g" \
 	$(HOST_BUILD_DIR)/configure.ac
+endef
+
+define Host/Configure
+	( cd $(HOST_BUILD_DIR) && NOCONFIGURE=1 ./autogen.sh && \
+	cp "lib/ccan.git/config.h" "lib/ccan/" )
+	$(call Host/Configure/Default)
 endef
 
 define Host/Install
@@ -56,5 +83,6 @@ define Host/Install
 	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/{sbattach,sbkeysync,sbsiglist,sbsign,sbvarsign,sbverify} $(STAGING_DIR_HOST)/bin
 endef
 
+#$(eval $(call Download,ccan))
 $(eval $(call HostBuild,sbsigntool))
 $(eval $(call BuildPackage,sbsigntool))
