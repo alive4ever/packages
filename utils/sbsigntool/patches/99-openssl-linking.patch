@@ -3,9 +3,9 @@ as 0x20000000L.
 
 --- a/src/sbverify.c
 +++ b/src/sbverify.c
-@@ -57,13 +57,13 @@
+@@ -56,13 +56,13 @@
+ #include <openssl/pem.h>
  #include <openssl/x509v3.h>
- #include <openssl/x509_vfy.h>
  
 -#if OPENSSL_VERSION_NUMBER < 0x10100000L
 +#if ( OPENSSL_VERSION_NUMBER == 0x20000000L || OPENSSL_VERSION_NUMBER < 0x10100000L )

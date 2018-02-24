@@ -8,7 +8,7 @@ PKG_MAINTAINER:=Alif M. Ahmad <alive4ever@live.com>
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=79616f66875f619788502fbf7ddc9cc1a0b58187
+PKG_SOURCE_VERSION:=a631793f2d02ef219b5348eab0ac2ae604ed1269
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_BUILD_DEPENDS:=gnu-efi binutils sbsigntool/host

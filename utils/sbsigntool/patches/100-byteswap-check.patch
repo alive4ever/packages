@@ -1,8 +1,8 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -73,6 +73,20 @@
- CPPFLAGS="$CPPFLAGS_save"
- AC_SUBST(EFI_CPPFLAGS, $EFI_CPPFLAGS)
+@@ -89,6 +89,20 @@
+ AC_SUBST(EFI_ARCH, $EFI_ARCH)
+ AC_SUBST(CRTPATH, $CRTPATH)
  
 +AC_CHECK_HEADER([byteswap.h],
 +	[AC_DEFINE([HAVE_BYTESWAP_H], [1], [Define to 1 if you have byteswap.h])],

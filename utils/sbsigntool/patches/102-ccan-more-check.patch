@@ -1,6 +1,6 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -103,6 +103,135 @@
+@@ -108,6 +108,135 @@
  	[AC_MSG_RESULT([Using ccan bswap_64 function])]
  	)
  
