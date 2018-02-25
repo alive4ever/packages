@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/efivar
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:= +libpopt
+  DEPENDS:= +libpopt +kmod-fs-efivarfs
   TITLE:=Manage UEFI variables
 endef
 
